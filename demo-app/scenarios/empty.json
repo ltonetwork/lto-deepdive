@@ -1,0 +1,41 @@
+{
+  "id": "ilt://empty-scenario",
+  "$schema": "https://specs.livecontracts.io/v0.2.0/scenario/schema.json#",
+  "actors": {
+    "initiator": {
+      "title": "Initiator"
+    }
+  },
+  "states": {
+    ":initial": {
+      "action": "start",
+      "transitions": [
+        {
+          "response": "ok",
+          "transition": ":success"
+        },
+        {
+          "response": "error",
+          "transition": ":failed"
+        }
+      ]
+    },
+    ":success": {
+      "actions": [],
+      "transitions": []
+    },
+    ":failed": {
+      "actions": [],
+      "transitions": []
+    }
+  },
+  "actions": {
+    "start": {
+      "$schema": "https://specs.livecontracts.io/v0.2.0/action/schema.json#",
+      "actor": "initiator",
+      "responses": {
+        "ok": {}
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "lto-deepdive",
+  "version": "1.0.0",
+  "description": "Example repository for building decentralized workflows",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legalthings/lto-deepdive.git"
+  },
+  "keywords": [
+    "lto",
+    "deepdive",
+    "decentralized",
+    "workflows"
+  ],
+  "author": "Sven Stam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/legalthings/lto-deepdive/issues"
+  },
+  "homepage": "https://github.com/legalthings/lto-deepdive#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "lto-api": "^0.5.10"
+  }
+}
