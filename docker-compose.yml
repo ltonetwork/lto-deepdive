@@ -20,7 +20,7 @@ services:
 
   legalflow:
     container_name: legalflow
-    image: legalthings/workflow-engine:v0.1.1
+    image: legalthings/workflow-engine:v0.1.2
     environment:
     - APPLICATION_ENV=dev.docker
     - phpmemory_limit=512M
