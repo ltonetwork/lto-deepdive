@@ -21,4 +21,6 @@ Other tools that will help setup a workflow are:
 
 [LTO Playground](https://playground.lto.network): An editing tool which visualizes the workflow
 
-[LTO Viewer](https://github.com/legalthings/lto-viewer) A viewer which can be connected to the node, to view the events within a chain.
+[LTO Viewer](https://github.com/legalthings/lto-viewer): A viewer which can be connected to the node, to view the events within a chain.
+
+[LiveContract Documentation](https://docs.livecontracts.io): Documentation to help build the workflow

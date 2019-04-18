@@ -1,4 +1,5 @@
 const LTOHelper = require('./lib/LTOHelper');
+const sha256 = require('crypto-js/sha256');
 const nodeUrl = 'http://localhost:3000';
 
 const main = async () => {
@@ -23,6 +24,7 @@ const main = async () => {
 
   // Load the scenario and add it to the chain
   const scenario = require(`./scenarios/empty.json`);
+  scenario.id = sha256(JSON.stringify(scenario)).toString();
   chain = lto.addScenarioEvent(chain, initiator, scenario);
 
   try {
