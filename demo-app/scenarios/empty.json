@@ -2,8 +2,29 @@
   "id": "ilt://empty-scenario",
   "$schema": "https://specs.livecontracts.io/v0.2.0/scenario/schema.json#",
   "actors": {
-    "initiator": {
-      "title": "Initiator"
+    "orphan": {
+      "title": "Wees",
+      "type": "object",
+      "properties": {
+        "older_18": {
+          "type": "boolean"
+        },
+        "older_21": {
+          "type": "boolean"
+        },
+        "studying": {
+          "type": "boolean"
+        }
+      }
+    },
+    "svb": {
+      "title": "SVB"
+    },
+    "onderwijsinstelling": {
+      "title": "Onderwijsinstelling"
+    },
+    "gba": {
+      "title": "GBA"
     }
   },
   "states": {
@@ -12,11 +33,105 @@
       "transitions": [
         {
           "response": "ok",
-          "transition": ":success"
+          "transition": "orphaned"
         },
         {
           "response": "error",
           "transition": ":failed"
+        }
+      ]
+    },
+    "orphaned": {
+      "actions": [
+        "receive_info_gba",
+        "receive_info_oi",
+        "receive_info_orphan"
+      ],
+      "transitions": [
+        {
+          "action": "receive_info_orphan",
+          "transition": "check_anw_gerechtigd"
+        },
+        {
+          "action": "receive_info_gba",
+          "transition": "check_anw_gerechtigd"
+        },
+        {
+          "action": "receive_info_oi",
+          "transition": "check_anw_gerechtigd"
+        }
+      ]
+    },
+    "check_anw_gerechtigd": {
+      "action": "check_anw_gerechtigd",
+      "transitions": [
+        {
+          "response": "yes",
+          "transition": "trigger_anw_gerechtigd"
+        },
+        {
+          "response": "no",
+          "transition": "orphaned"
+        }
+      ]
+    },
+    "trigger_anw_gerechtigd": {
+      "action": "trigger_anw_gerechtigd",
+      "transitions": [
+        {
+          "response": "ok",
+          "transition": "anw_gerechtigd"
+        },
+        {
+          "response": "error",
+          "transition": "anw_gerechtigd"
+        }
+      ]
+    },
+    "anw_gerechtigd": {
+      "actions": [
+        "receive_info_oi",
+        "receive_info_gba",
+        "receive_info_orphan"
+      ],
+      "transitions": [
+        {
+          "action": "receive_info_orphan",
+          "transition": "check_not_anw_gerechtigd"
+        },
+        {
+          "action": "receive_info_gba",
+          "transition": "check_not_anw_gerechtigd"
+        },
+        {
+          "action": "receive_info_oi",
+          "transition": "check_not_anw_gerechtigd"
+        }
+      ]
+    },
+    "check_not_anw_gerechtigd": {
+      "action": "check_anw_gerechtigd",
+      "transitions": [
+        {
+          "response": "yes",
+          "transition": "anw_gerechtigd"
+        },
+        {
+          "response": "no",
+          "transition": "trigger_not_anw_gerechtigd"
+        }
+      ]
+    },
+    "trigger_not_anw_gerechtigd": {
+      "action": "trigger_anw_gerechtigd",
+      "transitions": [
+        {
+          "response": "ok",
+          "transition": ":success"
+        },
+        {
+          "response": "error",
+          "transition": ":success"
         }
       ]
     },
@@ -32,9 +147,86 @@
   "actions": {
     "start": {
       "$schema": "https://specs.livecontracts.io/v0.2.0/action/schema.json#",
-      "actor": "initiator",
+      "actor": "orphan",
       "responses": {
-        "ok": {}
+        "ok": {
+          "update": {
+            "select": "actors.orphan",
+            "patch": true
+          }
+        }
+      }
+    },
+    "receive_info_orphan": {
+      "$schema": "https://specs.livecontracts.io/v0.2.0/action/schema.json#",
+      "actor": "orphan",
+      "responses": {
+        "ok": {
+          "update": {
+            "select": "actors.orphan",
+            "patch": true
+          }
+        }
+      }
+    },
+    "receive_info_gba": {
+      "$schema": "https://specs.livecontracts.io/v0.2.0/action/schema.json#",
+      "actor": "gba",
+      "responses": {
+        "ok": {
+          "update": {
+            "select": "actors.orphan",
+            "patch": true
+          }
+        }
+      }
+    },
+    "receive_info_oi": {
+      "$schema": "https://specs.livecontracts.io/v0.2.0/action/schema.json#",
+      "actor": "onderwijsinstelling",
+      "responses": {
+        "ok": {
+          "update": {
+            "select": "actors.orphan",
+            "patch": true
+          }
+        }
+      }
+    },
+    "check_anw_gerechtigd": {
+      "$schema": "https://specs.livecontracts.io/v0.2.0/action/nop/schema.json#",
+      "actor": "orphan",
+      "default_response": "yes",
+      "trigger_response": {
+        "<if>": {
+          "condition": {
+            "<apply>": {
+              "input": {
+                "<ref>": "actors.orphan"
+              },
+              "query": "older_18 == `true` && studying == `true` && older_21 == `false`"
+            }
+          },
+          "then": "yes",
+          "else": "no"
+        }
+      },
+      "responses": {
+        "yes": {},
+        "no": {}
+      }
+    },
+    "trigger_anw_gerechtigd": {
+      "$schema": "https://specs.livecontracts.io/v0.2.0/action/http/schema.json#",
+      "actor": "orphan",
+      "url": "http://requestbin.fullcontact.com/10r4fq01",
+      "data": {
+        "<ref>": "actors.orphan"
+      },
+      "method": "POST",
+      "responses": {
+        "ok": {},
+        "error": {}
       }
     }
   }
