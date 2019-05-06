@@ -16,8 +16,9 @@ const main = async () => {
   const processId = chain.createProjectionId('main');
   initiator.id = chain.createProjectionId('initiator');
 
-  // For testing purposes remove the chain if it already exists
+  // For testing purposes remove the chain and process if it already exists
   await lto.deleteEventChain(initiator, chain.id);
+  await lto.deleteProcess(initiator, processId);
 
   // To be able to interact with the chain the identity (with it's public key) needs to be added to the chain
   chain = await lto.addIdentityEvent(chain, initiator, 'initiator');
@@ -26,6 +27,12 @@ const main = async () => {
   const scenario = require(`./scenarios/empty.json`);
   scenario.id = sha256(JSON.stringify(scenario)).toString();
   chain = lto.addScenarioEvent(chain, initiator, scenario);
+
+  // Initiating a process id done with a process event, which contains processId, scenarioId and actors information
+  const actors = {
+    initiator: initiator.id
+  };
+  chain = lto.addProcessInitationEvent(chain, initiator, scenario.id, processId, actors);
 
   try {
     const res = await lto.sendChain(initiator, chain);
