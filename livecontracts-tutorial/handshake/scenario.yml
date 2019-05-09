@@ -1,0 +1,17 @@
+$schema: "https://specs.livecontracts.io/v0.2.0/scenario/schema.json#"
+title: A handshake
+
+actors:
+  initiator:
+    title: Initiator
+  recipient:
+    title: Recipient
+
+actions:
+  complete:
+    actor: initiator
+
+states:
+  :initial:
+    action: complete
+    transition: :success

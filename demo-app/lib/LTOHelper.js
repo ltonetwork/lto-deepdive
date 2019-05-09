@@ -1,5 +1,9 @@
 const { LTO, Request, HTTPSignature, Event, EventChain } = require('lto-api');
 const axios = require('axios');
+const sha256 = require('crypto-js/sha256');
+const path = require('path');
+const yaml = require('js-yaml');
+const fs = require('fs');
 
 class LTOHelper {
 
@@ -185,6 +189,22 @@ class LTOHelper {
 
     const resp = await axios(requestOptions);
     return resp;
+  }
+
+  loadScenarioFromFile(file) {
+    let scenario;
+    if (path.extname(file) == '.json') {
+      scenario = require(file);
+    } else if (path.extname(file) == '.yaml' || path.extname(file) == '.yml') {
+      const data = fs.readFileSync(file, 'utf-8');
+      scenario = yaml.load(data);
+    } else {
+      throw new Error('Invalid file format');
+    }
+
+    scenario.id = sha256(JSON.stringify(scenario)).toString();
+
+    return scenario;
   }
 }
 

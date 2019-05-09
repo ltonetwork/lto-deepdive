@@ -1,5 +1,5 @@
 const LTOHelper = require('./lib/LTOHelper');
-const sha256 = require('crypto-js/sha256');
+
 const nodeUrl = 'http://localhost:3000';
 
 const main = async () => {
@@ -24,8 +24,7 @@ const main = async () => {
   chain = await lto.addIdentityEvent(chain, initiator, 'initiator');
 
   // Load the scenario and add it to the chain
-  const scenario = require(`./scenarios/empty.json`);
-  scenario.id = sha256(JSON.stringify(scenario)).toString();
+  const scenario = lto.loadScenarioFromFile(`${__dirname}/scenarios/basic/scenario.yml`);
   chain = lto.addScenarioEvent(chain, initiator, scenario);
 
   // Initiating a process id done with a process event, which contains processId, scenarioId and actors information
