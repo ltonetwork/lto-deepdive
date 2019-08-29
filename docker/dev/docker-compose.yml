@@ -22,7 +22,7 @@ services:
     container_name: legalflow
     image: legalthings/workflow-engine:v0.1.3
     environment:
-      - APPLICATION_ENV=docker.dev
+      - APPLICATION_ENV=dev.docker
       - phpmemory_limit=512M
     volumes:
       - ./workflow-engine-config:/app/config/local
@@ -35,7 +35,7 @@ services:
     container_name: legalevents
     image: legalthings/event-chain:v0.1.2
     environment:
-      - APPLICATION_ENV=docker.dev
+      - APPLICATION_ENV=dev.docker
       - phpmemory_limit=512M
     networks:
       - lto
