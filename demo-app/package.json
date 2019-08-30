@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/legalthings/lto-deepdive#readme",
   "dependencies": {
-    "axios": "^0.18.0",
-    "js-yaml": "^3.13.1",
-    "lto-api": "^0.5.12"
+    "axios": "^0.18.1",
+    "lto-api": "^0.5.12",
+    "yaml": "^1.6.0"
   }
 }
