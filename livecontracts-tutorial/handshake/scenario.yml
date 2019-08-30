@@ -12,6 +12,6 @@ actions:
     actor: initiator
 
 states:
-  :initial:
+  initial:
     action: complete
     transition: :success

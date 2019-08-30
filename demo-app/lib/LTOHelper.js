@@ -2,7 +2,7 @@ const { LTO, Request, HTTPSignature, Event, EventChain } = require('lto-api');
 const axios = require('axios');
 const sha256 = require('crypto-js/sha256');
 const path = require('path');
-const yaml = require('js-yaml');
+const yaml = require('yaml');
 const fs = require('fs');
 
 class LTOHelper {
@@ -166,12 +166,10 @@ class LTOHelper {
       'date': date
     };
 
-    const req = new Request(path, method, headers);
+    const req = new Request(path, method, headers, data);
 
     const signature = new HTTPSignature(req, ['(request-target)', 'date']);
-    // console.log(signature.signWith(account));
     headers.authorization = `Signature ${signature.signWith(account)}`;
-    // headers['www-authenticate'] = `Signature ${signature.signWith(account)}`;
 
     const requestOptions = {
       method,
@@ -197,7 +195,7 @@ class LTOHelper {
       scenario = require(file);
     } else if (path.extname(file) == '.yaml' || path.extname(file) == '.yml') {
       const data = fs.readFileSync(file, 'utf-8');
-      scenario = yaml.load(data);
+      scenario = yaml.parse(data);
     } else {
       throw new Error('Invalid file format');
     }

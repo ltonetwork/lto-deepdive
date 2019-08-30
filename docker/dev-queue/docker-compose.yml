@@ -1,11 +1,6 @@
 version: '3'
 
 services:
-  rabbitmq:
-    image: legalthings/rabbitmq
-    networks:
-      - lto
-
   mongo:
     image: "mongo:3"
     ports:
@@ -14,8 +9,7 @@ services:
       - lto
 
   api-gateway:
-    container_name: api-gateway
-    image: legalthings/api-gateway:v0.1.7
+    image: legalthings/api-gateway:v0.1.8
     environment:
       - NODE_ENV=production
     ports:
@@ -24,11 +18,18 @@ services:
       - lto
 
   legalflow:
-    container_name: legalflow
-    image: legalthings/workflow-engine:v0.1.3
+    image: legalthings/nginx
     environment:
-      - APPLICATION_ENV=dev.docker
-      - phpmemory_limit=512M
+      - PHP_HOST=legalflow-fpm
+    networks:
+      - lto
+    depends_on:
+      - legalflow-fpm
+
+  legalflow-fpm:
+    image: legalthings/workflow-engine:v0.2.0
+    environment:
+      - APPLICATION_ENV=docker.dev
     volumes:
       - ./workflow-engine-config:/app/config/local
     networks:
@@ -37,18 +38,30 @@ services:
       - mongo
 
   legalevents:
-    container_name: legalevents
-    image: legalthings/event-chain:v0.1.2
+    image: legalthings/nginx
     environment:
-      - APPLICATION_ENV=dev.docker
+      - PHP_HOST=legalevents-fpm
+    networks:
+      - lto
+    depends_on:
+      - legalevents-fpm
+
+  legalevents-fpm:
+    image: legalthings/event-chain:v0.2.0
+    environment:
+      - APPLICATION_ENV=docker.dev-queue
       - phpmemory_limit=512M
     networks:
       - lto
     depends_on:
       - mongo
 
+  rabbitmq:
+    image: legalthings/rabbitmq
+    networks:
+      - lto
+
   event-queuer:
-    container_name: event-queuer
     image: legalthings/event-dispatcher:v0.1.2
     environment:
       - NODE_ENV=lto
@@ -59,7 +72,6 @@ services:
       - rabbitmq
 
   event-dispatcher:
-    container_name: event-dispatcher
     image: legalthings/event-dispatcher:v0.1.2
     environment:
       - NODE_ENV=lto
