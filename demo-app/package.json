@@ -28,6 +28,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "js-yaml": "^3.13.1",
-    "lto-api": "^0.5.10"
+    "lto-api": "^0.5.12"
   }
 }

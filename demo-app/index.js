@@ -7,7 +7,7 @@ const main = async () => {
   const lto = new LTOHelper(nodeUrl);
 
   // Create KeyPairs for both participants
-  const initiator = lto.createAccount('the seed of nda initiator');
+  const initiator = lto.createAccount('the seed of initiator');
 
   // Initialize an empty chain
   let chain = lto.createEventChain(initiator, 'process-identifier');
@@ -32,6 +32,8 @@ const main = async () => {
     initiator: initiator.id
   };
   chain = lto.addProcessInitationEvent(chain, initiator, scenario.id, processId, actors);
+
+  chain = lto.addResponseEvent(chain, initiator, processId, 'complete', 'ok');
 
   try {
     const res = await lto.sendChain(initiator, chain);
