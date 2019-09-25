@@ -107,7 +107,7 @@ const main = async () => {
     const lto = new LTOHelper(nodeUrl);
 
     // Create KeyPairs for both participants
-    const jack = lto.createAccount('the seed of jill');
+    const jack = lto.createAccount('the seed of jack');
 
     // Initialize an empty chain, created by jack
     let chain = await lto.loadChain(jack, chainId);
