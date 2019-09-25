@@ -98,9 +98,10 @@
 
 
 const LTOHelper = require('../lib/LTOHelper');
+const { Event } = require('lto-api');
 
-const nodeUrl = 'http://lto-fullnode-staging.eu-west-1.elasticbeanstalk.com';
-const chainId = '';
+const nodeUrl = 'http://lto-fullnode-lecture.eu-west-1.elasticbeanstalk.com';
+const chainId = '2bqA41yqF8KRSvnH4CHFcNFUWp7J2aUvGpBZ2Uss7dMFrXQvN9Bki7LfmrnKJw';
 
 const main = async () => {
 
@@ -118,7 +119,7 @@ const main = async () => {
     // Jake creates his own "shotgun" message
     const event = new Event({
         '$schema': 'https://example.livecontracts.io/message#',
-        message: "shotgun"
+        message: "shotgun!!!"
     });
 
     // Set the timestamp to 1 second before Jill

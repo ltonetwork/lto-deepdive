@@ -1,6 +1,6 @@
 const LTOHelper = require('./lib/LTOHelper');
 
-const nodeUrl = 'http://lto-fullnode-staging.eu-west-1.elasticbeanstalk.com';
+const nodeUrl = 'http://lto-fullnode-lecture.eu-west-1.elasticbeanstalk.com';
 const chainId = '2bqA41yqF8KRSvnH4CHFcNFUWp7J2aUvGpBZ2Uss7dMFrXQvN9Bki7LfmrnKJw';
 
 const main = async () => {
